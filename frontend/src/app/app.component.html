@@ -1,0 +1,90 @@
+<div class="chat-container">
+  <div class="message-area">
+    <div
+      style="
+        margin: auto;
+        padding-right: 32px;
+        padding-bottom: 100px;
+        max-width: 768px;
+      "
+    >
+      <!-- 顯示訊息區域，允許滾動 -->
+      <div
+        *ngFor="let message of queryLogResponse; let i = index"
+        class="message-box"
+      >
+        <div class="message user" *ngIf="message.role === 'user'">
+          {{ message.content }}
+        </div>
+        <div class="message assistant" *ngIf="message.role === 'assistant'">
+          <markdown [data]="message.content"></markdown>
+
+          <!-- 顯示工具區塊 -->
+          <details *ngIf="message.tool_detail" class="tool-section">
+            <summary>詳細資料</summary>
+
+            <!-- 如果是 table 類型資料 -->
+            <div
+              class="table-container"
+              *ngIf="message.tool_detail.type === 'table'"
+            >
+              <table class="tool-table">
+                <thead>
+                  <tr>
+                    <th *ngFor="let header of message.tool_detail.data.headers">
+                      {{ header.label }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of message.tool_detail.data.body">
+                    <td *ngFor="let header of message.tool_detail.data.headers">
+                      {{ row[header.key] }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 其他類型可自訂顯示邏輯 -->
+            <div *ngIf="message.tool_detail.type !== 'table'">
+              <pre>{{ message.tool_detail | json }}</pre>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- 顯示loading圖示 -->
+      <div *ngIf="loading" class="loading">載入中...</div>
+    </div>
+  </div>
+
+  <!-- 用戶輸入區域 -->
+  <div class="input-bg">
+    <div class="input-container">
+      <input
+        [(ngModel)]="userInput"
+        placeholder="輸入訊息..."
+        [disabled]="loading"
+        (keydown.enter)="handleEnter()"
+        (compositionstart)="isComposing = true"
+        (compositionend)="onCompositionEnd()"
+      />
+      <button *ngIf="userInput" (click)="queryLog()" [disabled]="loading">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+        >
+          <path
+            d="M12 19V5M12 5L7 10M12 5L17 10"
+            fill="none"
+            stroke="black"
+            stroke-width="2"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
