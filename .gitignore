@@ -58,8 +58,8 @@ backend/.coverage
 backend/coverage.xml
 backend/htmlcov/
 
-backend/!data/.gitkeep
-backend/**/*.log
+# backend/!data/.gitkeep
+# backend/**/*.log
 
 backend/.sqlite3
 backend/db.sqlite3

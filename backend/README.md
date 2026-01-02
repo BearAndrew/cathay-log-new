@@ -13,7 +13,6 @@ source .venv/bin/activate
 uv sync
 
 在 backend 下方建立 .env 放上 GOOGLE_API_KEY
-在 backend/app/data 下方放入 access_log_part1.log access_log_part2.log
 
 啟動後端服務 fastapi
 uvicorn app.main:app --reload --port 8000
