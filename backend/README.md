@@ -1,3 +1,5 @@
+在 /backend 路徑下執行
+
 建立虛擬環境
 uv venv
 
